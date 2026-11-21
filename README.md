@@ -165,6 +165,12 @@ echo "sdk.dir=$ANDROID_HOME" > local.properties
 
 ---
 
+## 上游狀態
+
+繁體中文什麼時候會進官方版本？倉庫證據分析見 [`UPSTREAM-STATUS.md`](UPSTREAM-STATUS.md)。
+
+---
+
 ## 注意事項
 
 - 這是**社群翻譯**，不是官方版本。專有名詞（Trakt、MDBList、Simkl 等服務名稱）保持原文。
