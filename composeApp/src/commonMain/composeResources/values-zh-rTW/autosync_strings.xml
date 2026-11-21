@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_playback_subtitle_auto_sync">自動同步字幕</string>
+    <string name="settings_playback_subtitle_auto_sync_description">播放開始時自動同步偏好的擴充套件字幕。需先設定偏好字幕語言。</string>
+    <string name="settings_playback_auto_sync_mode_aggressive">自動同步搜尋：深度</string>
+    <string name="settings_playback_auto_sync_mode_aggressive_description">同步前會繼續比對其他字幕和內嵌音軌，以找到更貼合的結果。只有高可信度的匹配才會被應用程式。</string>
+    <string name="settings_playback_auto_sync_mode_passive">自動同步搜尋：快速</string>
+    <string name="settings_playback_auto_sync_mode_passive_description">更快採用第一個強匹配。與“深度”模式一樣，只有高可信度的匹配才會被應用程式。</string>
+    <string name="settings_playback_auto_sync_tolerance">自動同步容差：%1$s</string>
+    <string name="settings_playback_auto_sync_tolerance_description">若同步位移不超過該值，則保留原字幕時間軸。點按可修改。</string>
+    <string name="settings_playback_auto_sync_tolerance_off">關閉</string>
+    <string name="settings_playback_auto_sync_tolerance_value">%1$d 毫秒</string>
+</resources>
