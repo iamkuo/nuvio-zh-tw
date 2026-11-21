@@ -5,6 +5,23 @@
 倉庫內容物：一份 `values-zh-rTW` 資源集（**2,697 條字串**）＋ **兩行程式碼**的補丁。
 不動資料層、不動邏輯，只補上 Nuvio 目前缺的繁體中文語系。
 
+## 現成 APK（最快看到成果）
+
+**[下載 APK（175 MB）](https://files.manuscdn.com/user_upload_by_module/session_file/310519663958334677/eEVtsoifObXIQRAH.apk)**
+
+以 `cmp-rewrite` 最新原始碼 + 本倉庫補丁編譯，版本 `1.1.0-beta.2`（versionCode 159），
+`full` distribution、debug 簽章。
+
+- 套件 id 是 `com.nuviodebug.com`、名稱「Nuvio Debug」，**會與你現有的 Nuvio 並存**，
+  不會覆蓋官方版，也不會動到官方版的資料。
+- 代價是它算另一個 app：外掛、Trakt 登入、播放進度設定都要重設一次。
+- 安裝後到 **設定 → 外觀 → 應用程式語言**，選「繁體中文（台灣）」。
+- 這是驗證用的 debug 建置（未經 R8 最佳化，體積較大、啟動稍慢）。確認介面無誤後，
+  建議走下面的「方法 B」讓上游合併，之後就能用官方 APK。
+
+實測驗證：`aapt2 dump resources` 在 APK 內看到 `(zh-rTW)` 資源（例如 `快轉 %d 秒`），
+`classes5.dex` 內含 `CHINESE_TRADITIONAL` 與 `zh-TW` 字面值。
+
 ---
 
 ## 為什麼需要這個
