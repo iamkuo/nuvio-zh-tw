@@ -7,7 +7,7 @@
 
 ## 現成 APK（最快看到成果）
 
-**[下載 APK（175 MB）](https://files.manuscdn.com/user_upload_by_module/session_file/310519663958334677/eEVtsoifObXIQRAH.apk)**
+**[下載 APK（175 MB）](https://files.manuscdn.com/user_upload_by_module/session_file/310519663958334677/bWXUkOnRDSBiuDrb.apk)**
 
 以 `cmp-rewrite` 最新原始碼 + 本倉庫補丁編譯，版本 `1.1.0-beta.2`（versionCode 159），
 `full` distribution、debug 簽章。
@@ -21,6 +21,10 @@
 
 實測驗證：`aapt2 dump resources` 在 APK 內看到 `(zh-rTW)` 資源（例如 `快轉 %d 秒`），
 `classes5.dex` 內含 `CHINESE_TRADITIONAL` 與 `zh-TW` 字面值。
+
+> **登入修正（2026-11-22）**：第一版 APK 無法登入，原因是 `local.properties` 少了 Supabase 設定，
+> 導致 `SupabaseConfig.URL` 是空值／`https://default.url`、`ANON_KEY` 是空字串。
+> 這一版已從官方 APK 取回公開的 client 設定並重新編譯，`/auth/v1/health` 實測回 200。
 
 ---
 
@@ -141,10 +145,29 @@ cp -r /path/to/nuvio-zh-tw/composeApp/src/commonMain/composeResources/values-zh-
 # 2) 套用補丁
 patch -p1 < /path/to/nuvio-zh-tw/patches/0001-add-traditional-chinese-language.patch
 
-# 3) 編譯
-echo "sdk.dir=$ANDROID_HOME" > local.properties
-./gradlew :composeApp:assembleDebug
-# 產物：composeApp/build/outputs/apk/debug/composeApp-debug.apk
+# 3) 建立 local.properties（少了這些，編出來的 APK 無法登入！）
+cat > local.properties <<'PROPS'
+sdk.dir=/path/to/android-sdk
+NUVIO_SUPABASE_URL=https://api.nuvio.tv
+NUVIO_SUPABASE_ANON_KEY=<官方 APK 內的 anon key>
+TMDB_API_KEY=<官方 APK 內的 TMDB v3 key>
+PROPS
+
+# 4) 編譯（必須指定 distribution，否則 Gradle 會直接報錯）
+./gradlew :androidApp:assembleFullDebug -Pnuvio.android.distribution=full
+# 產物：androidApp/build/outputs/apk/full/debug/androidApp-full-debug.apk
+```
+
+`SupabaseConfig.kt` 是由 `generateRuntimeConfigs` 這個 Gradle task 依 `local.properties` 產生的。
+沒填的話它會寫成 `URL = ""`、`ANON_KEY = ""`（執行期退回 `https://default.url`），
+**app 可以開、可以逛，但登入一定失敗**——這就是第一版 APK 的狀況。
+
+`NUVIO_SUPABASE_ANON_KEY` 與 `TMDB_API_KEY` 是公開的 client 端金鑰（每個官方安裝都有，
+受 RLS 保護），可從官方 release APK 的 `classes*.dex` 取出：
+
+```bash
+unzip -o -q 官方.apk "classes*.dex"
+grep -aoE 'eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+' classes*.dex | sort -u
 ```
 
 需要 JDK 21、Android SDK Platform 37.1、Build-Tools 37.0.0。
